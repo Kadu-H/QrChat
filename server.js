@@ -50,6 +50,7 @@ app.post('/', async (req, res) => {
         const imagem = await createImage(qr_src,req.body.cor);
         res.render("scan", {
             imagem: imagem,
+            qr_src: qr_src,
         });
     })
 });
