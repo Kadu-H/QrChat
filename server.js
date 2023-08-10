@@ -19,7 +19,7 @@ function renderView(){
 }
 renderView();
 
-async function createImage(qr_src, cor, mensagem) {
+async function createImage(qr_src, cor) {
     const width = 1080;
     const height = 1920;
 
@@ -37,13 +37,6 @@ async function createImage(qr_src, cor, mensagem) {
         // Combina as imagens
         colorImage.composite(qrImage, x, y, Jimp.RESIZE_NEAREST_NEIGHBOR);
 
-        await Jimp.loadFont(Jimp.FONT_SANS_64_WHITE).then((font) => {
-            x = (width - qrImage.bitmap.width) / 2;
-            y = (height - qrImage.bitmap.height) / 3.5;
-            colorImage.print(font, x, y, mensagem);
-        })
-        
-
         // Converte a imagem completa para base64
         const finalBase64Image = await colorImage.getBase64Async(Jimp.MIME_PNG);
         return finalBase64Image;
@@ -54,9 +47,9 @@ async function createImage(qr_src, cor, mensagem) {
 }
 
 app.post('/', async (req, res) => {
-    const linkWhats = "https://api.whatsapp.com/send?phone="+req.body.numero+"&text="+encodeURI(req.body.fraseQR);
+    const linkWhats = "https://api.whatsapp.com/send?phone="+req.body.numero+"&text="+encodeURI(req.body.mensagem);
     qrcode.toDataURL(linkWhats, async (err,qr_src) => {
-        const imagem = await createImage(qr_src,req.body.cor, req.body.mensagem);
+        const imagem = await createImage(qr_src,req.body.cor);
         res.render("scan", {
             imagem: imagem,
             qr_src: qr_src,
