@@ -27,7 +27,7 @@ async function createImage(qr_src, cor) {
 
     try {
         const qrImage = await Jimp.read(Buffer.from(qr_src.split(',')[1], 'base64'));
-        qrImage.resize(700, 700);
+        qrImage.resize(700, 700, Jimp.RESIZE_NEAREST_NEIGHBOR);
         // Calcula a posição para centralizar a imagem no canvas
         var x; 
         var y; 
