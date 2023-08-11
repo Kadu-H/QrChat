@@ -25,19 +25,14 @@ async function createImage(qr_src, cor) {
 
     const colorImage = new Jimp(width, height, cor);
 
-    
     const qrImage = await Jimp.read(Buffer.from(qr_src.split(',')[1], 'base64'));
     qrImage.resize(700, 700, Jimp.RESIZE_NEAREST_NEIGHBOR);
-    // Calcula a posição para centralizar a imagem no canvas
-    var x; 
-    var y; 
-    x = (width - qrImage.bitmap.width) / 2;
-    y = (height - qrImage.bitmap.height) / 1.5;
+     
+    const x = (width - qrImage.bitmap.width) / 2;
+    const y = (height - qrImage.bitmap.height) / 2;
 
-    // Combina as imagens
     colorImage.composite(qrImage, x, y, Jimp.RESIZE_NEAREST_NEIGHBOR);
 
-    // Converte a imagem completa para base64
     const finalBase64Image = await colorImage.getBase64Async(Jimp.MIME_PNG);
     return finalBase64Image;
 }
